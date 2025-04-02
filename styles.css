@@ -14,6 +14,8 @@ body {
 .main {
     min-height: 100vh;
     background-color: #f8f5f1;
+    display: flex;
+    align-items: center;
 }
 
 .container {
@@ -23,19 +25,25 @@ body {
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    width: 100%;
 }
 
 @media (min-width: 768px) {
     .container {
         flex-direction: row;
         gap: 6rem;
-        padding: 6rem 1rem;
+        padding: 0 1rem;
+        min-height: 80vh;
+        align-items: center;
     }
 }
 
 /* Left column styles */
 .left-column {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 @media (min-width: 768px) {
@@ -101,14 +109,14 @@ body {
 
 .divider {
     color: #666;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .link {
     display: block;
     color: #666;
     text-decoration: none;
-    margin-bottom: 0.25rem;
+    margin-bottom: 1rem;
 }
 
 .link:hover {
@@ -123,6 +131,9 @@ body {
 /* Right column styles */
 .right-column {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 @media (min-width: 768px) {
@@ -212,4 +223,81 @@ ul {
 
 li {
     margin-bottom: 0.5rem;
+}
+
+.contact-wrapper {
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.contact-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.email-reveal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.copy-icon {
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.copy-icon:hover {
+    opacity: 0.7;
+}
+
+.contact-link:hover .email-reveal {
+    opacity: 1;
+}
+
+.contact-link:hover > :not(.email-reveal) {
+    opacity: 0;
+}
+
+.contact-line {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.contact-line .link {
+    margin-bottom: 0;
+}
+
+.email-text {
+    color: #666;
+    display: none;
+}
+
+.email-text.visible {
+    display: inline;
+}
+
+.copy-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #666;
+    display: none;
+}
+
+.copy-button.visible {
+    display: block;
+}
+
+.copy-button:hover {
+    opacity: 0.7;
 } 

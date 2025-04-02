@@ -2,26 +2,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('.section');
     let activeSection = null;
     let isTransitioning = false;
+    let lastTransitionStart = 0;
 
-    sections.forEach(section => {
+    sections.forEach((section, sectionIndex) => {
         const header = section.querySelector('.section-header');
         const closeBtn = section.querySelector('.close-btn');
         const content = section.querySelector('.section-content');
 
-        // Add transition end listener
+        // Reset transition state if animation somehow gets interrupted
+        content.addEventListener('transitioncancel', () => {
+            isTransitioning = false;
+        });
+
         content.addEventListener('transitionend', () => {
             isTransitioning = false;
         });
 
         header.addEventListener('click', (e) => {
-            // Prevent click if we're in transition
+            e.preventDefault();
+            e.stopPropagation();
+
+            // If still transitioning but it's been more than 500ms, force reset
             if (isTransitioning) {
-                e.preventDefault();
-                e.stopPropagation();
-                return;
+                if (Date.now() - lastTransitionStart > 500) {
+                    isTransitioning = false;
+                } else {
+                    return;
+                }
             }
 
-            const index = parseInt(header.dataset.index);
+            const index = sectionIndex;
             
             if (activeSection === index) {
                 // Close the current section
@@ -29,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 activeSection = null;
             } else {
                 // Close any open section
-                if (activeSection !== null) {
+                if (activeSection !== null && sections[activeSection]) {
                     sections[activeSection].classList.remove('active');
                 }
                 // Open the clicked section
@@ -38,17 +48,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             isTransitioning = true;
-            e.preventDefault();
-            e.stopPropagation();
+            lastTransitionStart = Date.now();
         });
 
         // Prevent the close button from triggering the section toggle
-        closeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            section.classList.remove('active');
-            activeSection = null;
-        });
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                section.classList.remove('active');
+                activeSection = null;
+                isTransitioning = false;
+            });
+        }
     });
 
     // Contact email functionality
